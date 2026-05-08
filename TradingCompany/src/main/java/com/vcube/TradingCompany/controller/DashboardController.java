@@ -24,7 +24,9 @@ public class DashboardController {
         model.addAttribute("pendingAmount", saleService.getPendingAmount());
         model.addAttribute("totalBags", saleService.getTotalBagsSold());
         model.addAttribute("stockList", riceStockService.getAllStock());
-
+        // ✅ TOTAL STOCK
+        model.addAttribute("totalStock",
+                riceStockService.getTotalBags());
         return "dashboard";
     }
 }
