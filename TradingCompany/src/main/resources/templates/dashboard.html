@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rice Trading Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f7fc;
+        }
+
+        .navbar {
+            background: #2e7d32;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        /* SUMMARY CARDS */
+        .summary-card {
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .stock { background: #0d6efd; }
+        .sold { background: #198754; }
+        .paid { background: #20c997; }
+        .pending { background: #dc3545; }
+
+        .summary-icon {
+            font-size: 35px;
+        }
+
+        /* ACTION CARDS */
+        .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .rice { color: #0d6efd; }
+        .stock-icon { color: #198754; }
+        .sales { color: #ffc107; }
+        .payment { color: #dc3545; }
+    </style>
+</head>
+
+<body>
+
+<!-- 🌾 Navbar -->
+<nav class="navbar px-4 py-2">
+    <span class="navbar-brand fs-4">🌾 Rice Trading System</span>
+
+    <a href="/logout" class="btn btn-light btn-sm">
+        <i class="bi bi-box-arrow-right"></i> Logout
+    </a>
+</nav>
+
+<div class="container mt-4">
+
+    <!-- 📊 SUMMARY CARDS -->
+    <div class="row g-4 mb-5">
+
+        <!-- Total Stock -->
+        <div class="col-md-3">
+            <div class="summary-card stock shadow">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6>Total Stock</h6>
+                        <h3 th:text="${totalStock}">0</h3>
+                    </div>
+                    <i class="bi bi-box-seam summary-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bags Sold -->
+        <div class="col-md-3">
+            <div class="summary-card sold shadow">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6>Bags Sold</h6>
+                        <h3 th:text="${totalBags}">0</h3>
+                    </div>
+                    <i class="bi bi-cart-check summary-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paid -->
+        <div class="col-md-3">
+            <div class="summary-card paid shadow">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6>Paid Amount</h6>
+                        <h3>₹ <span th:text="${totalPaid}">0</span></h3>
+                    </div>
+                    <i class="bi bi-cash-stack summary-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending -->
+        <div class="col-md-3">
+            <div class="summary-card pending shadow">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6>Pending</h6>
+                        <h3>₹ <span th:text="${pendingAmount}">0</span></h3>
+                    </div>
+                    <i class="bi bi-hourglass-split summary-icon"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ⚡ QUICK ACTIONS (LIKE YOUR DESIGN) -->
+    <h4 class="text-center mb-4 fw-bold">Manage System</h4>
+
+    <div class="row g-4">
+
+        <!-- Rice -->
+        <div class="col-md-3">
+            <div class="card text-center p-4 shadow-sm">
+                <div class="icon rice">
+                    <i class="bi bi-basket-fill"></i>
+                </div>
+                <h5>Rice</h5>
+                <p class="text-muted">Add & manage rice types</p>
+                <a href="/rice/list" class="btn btn-primary mt-2">Manage</a>
+            </div>
+        </div>
+
+        <!-- Stock -->
+        <div class="col-md-3">
+            <div class="card text-center p-4 shadow-sm">
+                <div class="icon stock-icon">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <h5>Stock</h5>
+                <p class="text-muted">Manage stock & bag sizes</p>
+                <a href="/stock/list" class="btn btn-success mt-2">Manage</a>
+            </div>
+        </div>
+
+        <!-- Sales -->
+        <div class="col-md-3">
+            <div class="card text-center p-4 shadow-sm">
+                <div class="icon sales">
+                    <i class="bi bi-cart-fill"></i>
+                </div>
+                <h5>Sales</h5>
+                <p class="text-muted">Sell rice & track sales</p>
+                <a href="/sales/sell" class="btn btn-warning mt-2">Sell</a>
+            </div>
+        </div>
+
+        <!-- Payments -->
+        <div class="col-md-3">
+            <div class="card text-center p-4 shadow-sm">
+                <div class="icon payment">
+                    <i class="bi bi-cash-coin"></i>
+                </div>
+                <h5>Payments</h5>
+                <p class="text-muted">View & update payments</p>
+                <a href="/sales/list" class="btn btn-danger mt-2">View</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

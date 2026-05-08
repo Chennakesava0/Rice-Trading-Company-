@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sell Rice</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-success">🛒 Sell Rice</h2>
+        <a href="/dashboard" class="btn btn-secondary btn-sm">Dashboard</a>
+    </div>
+
+    <div th:if="${message}" class="alert alert-info text-center">
+        <span th:text="${message}"></span>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+
+            <form action="/sales/sell" method="post">
+
+                <!-- Stock -->
+                <div class="mb-3">
+                    <label class="form-label">Select Rice</label>
+
+                    <select name="stockId" class="form-select" required>
+                        <option value="">-- Select Rice Stock --</option>
+
+                        <option th:each="stock : ${stockList}"
+                                th:value="${stock.id}"
+                                th:text="${stock.rice.name + ' (' + stock.bagSize + ') - Available: ' + stock.stock}">
+                        </option>
+
+                    </select>
+                </div>
+
+                <!-- Customer Name -->
+                <div class="mb-3">
+                    <label class="form-label">Customer Name</label>
+                    <input type="text" name="customerName" class="form-control" required>
+                </div>
+
+                <!-- Bags -->
+                <div class="mb-3">
+                    <label class="form-label">Number of Bags</label>
+                    <input type="number" name="bagsSold" class="form-control" required>
+                </div>
+
+                <!-- Payment -->
+                <div class="mb-3">
+                    <label class="form-label">Payment Status</label>
+                    <select name="paymentStatus" class="form-select" required>
+                        <option value="PAID">Paid</option>
+                        <option value="PENDING">Pending</option>
+                    </select>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success px-4">Sell</button>
+                    <a href="/sales/list" class="btn btn-outline-primary">View Sales</a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- STOCK TABLE -->
+    <div class="card shadow">
+        <div class="card-body">
+
+            <h5 class="text-primary mb-3">📦 Available Stock</h5>
+
+            <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                <tr>
+                    <th>Rice</th>
+                    <th>Bag Size</th>
+                    <th>Available</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="stock : ${stockList}">
+                    <td th:text="${stock.rice.name}"></td>
+                    <td th:text="${stock.bagSize}"></td>
+                    <td th:text="${stock.stock}"></td>
+                    <td th:text="${stock.price}"></td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(stockList)}">
+                    <td colspan="4" class="text-danger">No stock available</td>
+                </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
