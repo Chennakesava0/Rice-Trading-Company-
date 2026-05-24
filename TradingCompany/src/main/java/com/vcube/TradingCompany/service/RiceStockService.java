@@ -12,97 +12,144 @@ import com.vcube.TradingCompany.repository.RiceStockRepository;
 @Service
 public class RiceStockService {
 
-    @Autowired
-    private RiceStockRepository riceStockRepository;
+	@Autowired
+	private RiceStockRepository riceStockRepository;
 
-    // ➕ Add or Update Stock
-    public RiceStock addStock(RiceStock newStock) {
+	// ➕ Add or Update Stock
+	public String addStock(RiceStock newStock) {
 
-        // ✅ Validation
-        if (newStock.getStock() <= 0) {
-            throw new RuntimeException("Stock must be greater than 0");
-        }
+		// ✅ Stock validation
+		if (newStock.getStock() <= 0) {
 
-        if (newStock.getPrice() <= 0) {
-            throw new RuntimeException("Price must be greater than 0");
-        }
+			return "Stock must be greater than 0";
+		}
 
-        if (newStock.getBagSize() == null || newStock.getBagSize().isEmpty()) {
-            throw new RuntimeException("Bag size is required");
-        }
+		// ✅ Stock count validation
+		if (newStock.getStock() > 500) {
 
-        // Clean bag size
-        newStock.setBagSize(newStock.getBagSize().trim());
+			return "Stock should be below 500 bags";
+		}
 
-        // ✅ Check existing (same rice + bag size)
-        RiceStock existing = riceStockRepository
-                .findByRiceAndBagSize(newStock.getRice(), newStock.getBagSize());
+		// ✅ Price validation
+		if (newStock.getPrice() <= 0) {
 
-        if (existing != null) {
-            // 🔄 Update stock
-            existing.setStock(existing.getStock() + newStock.getStock());
+			return "Price must be greater than 0";
+		}
 
-            // Update latest price
-            existing.setPrice(newStock.getPrice());
+		// ✅ Price 5 digit validation
+		if (newStock.getPrice() > 99999) {
 
-            return riceStockRepository.save(existing);
-        }
+			return "Price should contain only 5 digits";
+		}
 
-        // 🆕 New stock
-        return riceStockRepository.save(newStock);
-    }
+		// ✅ Bag size validation
+		if (newStock.getBagSize() == null || newStock.getBagSize().trim().isEmpty()) {
 
-    // 📋 Get all stock
-    public List<RiceStock> getAllStock() {
-        return riceStockRepository.findAll();
-    }
+			return "Bag size is required";
+		}
 
-    // 🔍 Get stock by ID
-    public RiceStock getStockById(Long id) {
-        return riceStockRepository.findById(id).orElse(null);
-    }
+		// ✅ Remove spaces
+		newStock.setBagSize(newStock.getBagSize().trim());
 
-    // 📦 Get stock by rice
-    public List<RiceStock> getStockByRice(Rice rice) {
-        return riceStockRepository.findByRice(rice);
-    }
+		// ✅ Check existing stock
+		RiceStock existing = riceStockRepository.findByRiceAndBagSize(newStock.getRice(), newStock.getBagSize());
 
-    // 📦 Get available stock only (>0)
-    public List<RiceStock> getAvailableStock() {
-        return riceStockRepository.findByStockGreaterThan(0);
-    }
+		// ✅ Update existing stock
+		if (existing != null) {
 
-    // 🔄 Update stock manually
-    public RiceStock updateStock(Long id, int newStock) {
+			existing.setStock(existing.getStock() + newStock.getStock());
 
-        RiceStock stock = riceStockRepository.findById(id).orElse(null);
+			// Update latest price
+			existing.setPrice(newStock.getPrice());
 
-        if (stock == null) {
-            throw new RuntimeException("Stock not found");
-        }
+			riceStockRepository.save(existing);
 
-        if (newStock < 0) {
-            throw new RuntimeException("Stock cannot be negative");
-        }
+			return "Stock updated successfully";
+		}
 
-        stock.setStock(newStock);
-        return riceStockRepository.save(stock);
-    }
+		// ✅ Save new stock
+		riceStockRepository.save(newStock);
 
-    // 🔥 NEW: Total Stock Value
-    public double getTotalStockValue() {
-        return riceStockRepository.findAll()
-                .stream()
-                .mapToDouble(s -> s.getStock() * s.getPrice())
-                .sum();
-    }
+		return "Stock added successfully";
+	}
 
-    // 🔥 NEW: Total Bags Count
-    public int getTotalBags() {
-        return riceStockRepository.findAll()
-                .stream()
-                .mapToInt(RiceStock::getStock)
-                .sum();
-    }
+	// 📋 Get all stock
+	public List<RiceStock> getAllStock() {
+
+		return riceStockRepository.findAll();
+	}
+
+	// 🔍 Get stock by ID
+	public RiceStock getStockById(Long id) {
+
+		return riceStockRepository.findById(id).orElse(null);
+	}
+
+	// 📦 Get stock by rice
+	public List<RiceStock> getStockByRice(Rice rice) {
+
+		return riceStockRepository.findByRice(rice);
+	}
+
+	// 📦 Get available stock only
+	public List<RiceStock> getAvailableStock() {
+
+		return riceStockRepository.findByStockGreaterThan(0);
+	}
+
+	// 🔄 Update stock manually
+	public String updateStock(Long id, int newStock) {
+
+		RiceStock stock = riceStockRepository.findById(id).orElse(null);
+
+		// ✅ Null validation
+		if (stock == null) {
+
+			return "Stock not found";
+		}
+
+		// ✅ Negative validation
+		if (newStock < 0) {
+
+			return "Stock cannot be negative";
+		}
+
+		// ✅ Limit validation
+		if (newStock > 500) {
+
+			return "Stock should be below 500 bags";
+		}
+
+		// ✅ Update stock
+		stock.setStock(newStock);
+
+		riceStockRepository.save(stock);
+
+		return "Stock updated successfully";
+	}
+
+	// 🔥 Total Stock Value
+	public double getTotalStockValue() {
+
+		return riceStockRepository.findAll()
+
+				.stream()
+
+				.mapToDouble(s -> s.getStock() * s.getPrice())
+
+				.sum();
+	}
+
+	// 🔥 Total Bags Count
+	public int getTotalBags() {
+
+		return riceStockRepository.findAll()
+
+				.stream()
+
+				.mapToInt(RiceStock::getStock)
+
+				.sum();
+	}
 
 }

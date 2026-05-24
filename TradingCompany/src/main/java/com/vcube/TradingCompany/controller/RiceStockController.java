@@ -54,22 +54,42 @@ public class RiceStockController {
     // 💾 Save stock (CLEAN VERSION)
     @PostMapping("/save")
     public String saveStock(@RequestParam("riceId") Long riceId,
-                            @ModelAttribute RiceStock stock) {
+                            @ModelAttribute RiceStock stock,
+                            Model model) {
 
-        // ✅ Fetch rice from DB
+        // ✅ Fetch rice
         Rice rice = riceService.getRiceById(riceId);
 
-        // ❗ Check if rice exists
+        // ✅ Rice validation
         if (rice == null) {
-            throw new RuntimeException("Rice not found");
+
+            model.addAttribute("message",
+                    "Rice not found");
+
+            model.addAttribute("riceList",
+                    riceService.getAllRice());
+
+            return "add-stock";
         }
 
-        // ✅ Set rice into stock
+        // ✅ Set rice
         stock.setRice(rice);
 
-        // ✅ Save
-        riceStockService.addStock(stock);
+        // ✅ Save stock
+        String message =
+                riceStockService.addStock(stock);
 
-        return "redirect:/stock/list";
+        // ✅ Send message to UI
+        model.addAttribute("message", message);
+
+        // ✅ Reload dropdown
+        model.addAttribute("riceList",
+                riceService.getAllRice());
+
+        model.addAttribute("stock",
+                new RiceStock());
+
+        // ✅ Stay on same page
+        return "add-stock";
     }
 }
