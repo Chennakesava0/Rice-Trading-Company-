@@ -1,5 +1,7 @@
 package com.vcube.TradingCompany.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -72,4 +74,7 @@ public class RiceStock {
     private int stock;
 
     private double totalPrice;
+    
+    // STOCK ADDED DATE
+    private LocalDate stockDate;
 }

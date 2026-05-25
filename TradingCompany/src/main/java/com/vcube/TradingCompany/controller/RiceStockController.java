@@ -1,8 +1,8 @@
 package com.vcube.TradingCompany.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,76 +20,78 @@ import com.vcube.TradingCompany.service.RiceStockService;
 @RequestMapping("/stock")
 public class RiceStockController {
 
-    @Autowired
-    private RiceStockService riceStockService;
+	@Autowired
+	private RiceStockService riceStockService;
 
-    @Autowired
-    private RiceService riceService;
+	@Autowired
+	private RiceService riceService;
 
-    // 📋 View stock list
-    @GetMapping("/list")
-    public String stockList(Model model) {
+	// 📋 View stock list
+	@GetMapping("/list")
+	public String stockList(@RequestParam(defaultValue = "0") int page,
+	                        Model model) {
 
-        List<RiceStock> stocks = riceStockService.getAllStock();
+	    int size = 5; // records per page
 
-        model.addAttribute("stocks", stocks);
+	    Page<RiceStock> stockPage =
+	            riceStockService.getAllStock(PageRequest.of(page, size));
 
-        // 🔥 ADD TOTALS
-        model.addAttribute("totalValue", riceStockService.getTotalStockValue());
-        model.addAttribute("totalBags", riceStockService.getTotalBags());
+	    model.addAttribute("stocks", stockPage.getContent());
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("totalPages", stockPage.getTotalPages());
 
-        return "stock-list";
-    }
+	    model.addAttribute("totalValue", riceStockService.getTotalStockValue());
+	    model.addAttribute("totalBags", riceStockService.getTotalBags());
 
-    // ➕ Add stock page
-    @GetMapping("/add")
-    public String addStockPage(Model model) {
+	    return "stock-list";
+	}
 
-        model.addAttribute("stock", new RiceStock());
-        model.addAttribute("riceList", riceService.getAllRice());
+	// ➕ Add stock page
+	@GetMapping("/add")
+	public String addStockPage(Model model) {
 
-        return "add-stock";
-    }
+		model.addAttribute("stock", new RiceStock());
+		model.addAttribute("riceList", riceService.getAllRice());
 
-    // 💾 Save stock (CLEAN VERSION)
-    @PostMapping("/save")
-    public String saveStock(@RequestParam("riceId") Long riceId,
-                            @ModelAttribute RiceStock stock,
-                            Model model) {
+		return "add-stock";
+	}
 
-        // ✅ Fetch rice
-        Rice rice = riceService.getRiceById(riceId);
+	// 💾 Save stock (CLEAN VERSION)
+	@PostMapping("/save")
+	public String saveStock(@RequestParam("riceId") Long riceId, @ModelAttribute RiceStock stock, Model model) {
 
-        // ✅ Rice validation
-        if (rice == null) {
+		// ✅ Fetch rice
+		Rice rice = riceService.getRiceById(riceId);
 
-            model.addAttribute("message",
-                    "Rice not found");
+		// ✅ Rice validation
+		if (rice == null) {
 
-            model.addAttribute("riceList",
-                    riceService.getAllRice());
+			model.addAttribute("message", "Rice not found");
 
-            return "add-stock";
-        }
+			model.addAttribute("riceList", riceService.getAllRice());
 
-        // ✅ Set rice
-        stock.setRice(rice);
+			return "add-stock";
+		}
 
-        // ✅ Save stock
-        String message =
-                riceStockService.addStock(stock);
+		// ✅ Set rice
+		stock.setRice(rice);
 
-        // ✅ Send message to UI
-        model.addAttribute("message", message);
+		// ✅ Save stock
+		String message = riceStockService.addStock(stock);
 
-        // ✅ Reload dropdown
-        model.addAttribute("riceList",
-                riceService.getAllRice());
+		// ✅ If validation error stay on same page
+		if (!message.equals("Stock added successfully") && !message.equals("Stock updated successfully")) {
 
-        model.addAttribute("stock",
-                new RiceStock());
+			model.addAttribute("message", message);
 
-        // ✅ Stay on same page
-        return "add-stock";
-    }
+			model.addAttribute("riceList", riceService.getAllRice());
+
+			model.addAttribute("stock", stock);
+
+			return "add-stock";
+		}
+
+		// ✅ Success → Redirect to stock list
+		return "redirect:/stock/list";
+	}
 }

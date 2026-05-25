@@ -92,6 +92,15 @@ body {
 							class="form-control bg-light fw-bold text-success" readonly>
 					</div>
 
+					<!-- ✅ STOCK DATE -->
+					<div class="mb-3">
+						<label class="form-label">Stock Added Date</label> <input
+							type="text" class="form-control"
+							th:value="${#temporals.format(#temporals.createNow(), 'dd-MM-yyyy')}"
+							readonly>
+					</div>
+
+
 					<!-- Buttons -->
 					<div class="text-center mt-4">
 						<button type="submit" class="btn btn-success px-4">💾

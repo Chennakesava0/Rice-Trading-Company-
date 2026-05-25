@@ -2,6 +2,8 @@ package com.vcube.TradingCompany.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -21,4 +23,6 @@ public interface RiceStockRepository extends JpaRepository<RiceStock, Long> {
     
     @Query("SELECT COALESCE(SUM(r.stock),0) FROM RiceStock r")
     Integer getTotalStock();
+    
+    Page<RiceStock> findAll(Pageable pageable);
 }

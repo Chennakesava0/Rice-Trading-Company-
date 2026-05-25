@@ -20,13 +20,24 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
 
-        model.addAttribute("totalPaid", saleService.getTotalPaidAmount());
-        model.addAttribute("pendingAmount", saleService.getPendingAmount());
-        model.addAttribute("totalBags", saleService.getTotalBagsSold());
+        // ✅ TOTAL PAID AMOUNT (safe null handling)
+        Double totalPaid = saleService.getTotalPaidAmount();
+        model.addAttribute("totalPaid", totalPaid != null ? totalPaid : 0.0);
+
+        // ✅ PENDING AMOUNT (safe null handling)
+        Double pendingAmount = saleService.getPendingAmount();
+        model.addAttribute("pendingAmount", pendingAmount != null ? pendingAmount : 0.0);
+
+        // ✅ TOTAL BAGS SOLD
+        Integer totalBagsSold = saleService.getTotalBagsSold();
+        model.addAttribute("totalBags", totalBagsSold != null ? totalBagsSold : 0);
+
+        // ✅ STOCK LIST
         model.addAttribute("stockList", riceStockService.getAllStock());
-        // ✅ TOTAL STOCK
-        model.addAttribute("totalStock",
-                riceStockService.getTotalBags());
+
+        // ✅ TOTAL STOCK BAGS
+        model.addAttribute("totalStock", riceStockService.getTotalBags());
+
         return "dashboard";
     }
 }

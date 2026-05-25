@@ -1,8 +1,11 @@
 package com.vcube.TradingCompany.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.vcube.TradingCompany.model.Rice;
@@ -17,6 +20,9 @@ public class RiceStockService {
 
 	// ➕ Add or Update Stock
 	public String addStock(RiceStock newStock) {
+		
+		 // ✅ Current Date
+	    newStock.setStockDate(LocalDate.now());
 
 		// ✅ Stock validation
 		if (newStock.getStock() <= 0) {
@@ -75,8 +81,11 @@ public class RiceStockService {
 
 	// 📋 Get all stock
 	public List<RiceStock> getAllStock() {
+	    return riceStockRepository.findAll();
+	}
 
-		return riceStockRepository.findAll();
+	public Page<RiceStock> getAllStock(Pageable pageable) {
+	    return riceStockRepository.findAll(pageable);
 	}
 
 	// 🔍 Get stock by ID

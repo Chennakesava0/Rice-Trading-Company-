@@ -2,6 +2,8 @@ package com.vcube.TradingCompany.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.vcube.TradingCompany.model.Sale;
@@ -16,4 +18,6 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 
     // Find sales by customer name
     List<Sale> findByCustomerName(String customerName);
+    
+    Page<Sale> findAll(Pageable pageable);
 }

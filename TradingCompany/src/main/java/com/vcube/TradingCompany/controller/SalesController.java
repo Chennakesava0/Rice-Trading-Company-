@@ -1,8 +1,8 @@
 package com.vcube.TradingCompany.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,28 +43,45 @@ public class SalesController {
                            @RequestParam String customerName,
                            Model model) {
 
-        String message =
-                saleService.sellRice(
-                        stockId,
-                        customerName,
-                        bagsSold,
-                        paymentStatus);
+        // ❌ VALIDATION AT CONTROLLER LEVEL (FAST RESPONSE)
+        if (bagsSold <= 0) {
+            model.addAttribute("message", "❌ Bags sold must be greater than 0");
+            model.addAttribute("stockList", riceStockService.getAvailableStock());
+            return "sell-rice";
+        }
 
-        model.addAttribute("message", message);
+        // Call service
+        String message = saleService.sellRice(
+                stockId,
+                customerName,
+                bagsSold,
+                paymentStatus
+        );
 
-        model.addAttribute("stockList",
-                riceStockService.getAvailableStock());
+        // ❌ IF ERROR FROM SERVICE
+        if (!message.toLowerCase().contains("success")) {
+            model.addAttribute("message", message);
+            model.addAttribute("stockList", riceStockService.getAvailableStock());
+            return "sell-rice";
+        }
 
-        return "sell-rice";
+        // ✅ SUCCESS → REDIRECT TO SALES LIST
+        return "redirect:/sales/list";
     }
 
     // View Sales
     @GetMapping("/list")
-    public String salesList(Model model) {
+    public String salesList(@RequestParam(defaultValue = "0") int page,
+                            Model model) {
 
-        List<Sale> sales = saleService.getAllSales();
+        int size = 8;
 
-        model.addAttribute("sales", sales);
+        Page<Sale> salesPage =
+                saleService.getAllSales(PageRequest.of(page, size));
+
+        model.addAttribute("sales", salesPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", salesPage.getTotalPages());
 
         return "sales";
     }

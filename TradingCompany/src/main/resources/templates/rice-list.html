@@ -50,23 +50,39 @@ body {
 					<tr>
 						<th>ID</th>
 						<th>Rice Name</th>
-						
+
 					</tr>
 				</thead>
 
 				<tbody>
-					<tr th:each="rice : ${riceList}">
+					<tr th:each="rice : ${ricePage.content}">
 						<td th:text="${rice.id}"></td>
 						<td th:text="${rice.name}"></td>
-						
 					</tr>
 				</tbody>
 
 			</table>
 
+			<!-- PAGINATION CONTROLS -->
+			<div>
+
+				<br>
+
+				<!-- Pagination -->
+				<div class="d-flex justify-content-center mt-3">
+					<a class="btn btn-sm btn-primary me-2"
+						th:if="${ricePage.hasPrevious()}"
+						th:href="@{/rice/list(page=${ricePage.number - 1})}"> Previous
+					</a> <span class="align-self-center mx-2"> <span
+						th:text="${ricePage.number + 1}"></span> / <span
+						th:text="${ricePage.totalPages}"></span>
+					</span> <a class="btn btn-sm btn-success ms-2"
+						th:if="${ricePage.hasNext()}"
+						th:href="@{/rice/list(page=${ricePage.number + 1})}"> Next </a>
+
+				</div>
+			</div>
+
 		</div>
-
-	</div>
-
 </body>
 </html>
