@@ -1,6 +1,6 @@
 package com.vcube.TradingCompany.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,19 +70,21 @@ public class Sale {
 //	}
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    private RiceStock riceStock;
+	@ManyToOne
+	private RiceStock riceStock;
 
-    private String customerName;
+	private String customerName;
 
-    private int bagsSold;
+	private int bagsSold;
+	
+	private Double pricePerBag;
 
-    private double totalAmount;
+	private double totalAmount;
 
-    private String paymentStatus;
+	private String paymentStatus;
 
-    private Date date;
+	private LocalDateTime date;
 }

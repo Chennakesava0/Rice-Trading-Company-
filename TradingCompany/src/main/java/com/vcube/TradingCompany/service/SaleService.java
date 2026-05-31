@@ -1,6 +1,6 @@
 package com.vcube.TradingCompany.service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -60,10 +60,11 @@ public class SaleService {
         sale.setRiceStock(stock);
         sale.setCustomerName(customerName);
         sale.setBagsSold(bags);
+        sale.setPricePerBag(stock.getPrice()); 
         sale.setTotalAmount(totalAmount);
         sale.setPaymentStatus(paymentStatus);
-        sale.setDate(new Date());
-
+        sale.setDate(LocalDateTime.now());
+        
         // ✅ Save sale
         saleRepository.save(sale);
 
@@ -118,5 +119,11 @@ public class SaleService {
                 .stream()
                 .mapToInt(Sale::getBagsSold)
                 .sum();
+    }
+    
+    public Sale getSaleById(Long id) {
+
+        return saleRepository.findById(id).orElse(null);
+
     }
 }

@@ -94,4 +94,15 @@ public class SalesController {
 
         return "redirect:/sales/list";
     }
+    
+    @GetMapping("/receipt/{id}")
+    public String receipt(@PathVariable Long id,
+                          Model model) {
+
+        Sale sale = saleService.getSaleById(id);
+
+        model.addAttribute("sale", sale);
+
+        return "receipt";
+    }
 }
