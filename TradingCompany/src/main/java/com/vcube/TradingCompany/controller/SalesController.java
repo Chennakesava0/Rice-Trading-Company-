@@ -41,6 +41,7 @@ public class SalesController {
                            @RequestParam int bagsSold,
                            @RequestParam String paymentStatus,
                            @RequestParam String customerName,
+                           @RequestParam String phone,
                            Model model) {
 
         // ❌ VALIDATION AT CONTROLLER LEVEL (FAST RESPONSE)
@@ -54,6 +55,7 @@ public class SalesController {
         String message = saleService.sellRice(
                 stockId,
                 customerName,
+                phone,
                 bagsSold,
                 paymentStatus
         );

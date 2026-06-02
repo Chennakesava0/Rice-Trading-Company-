@@ -1,5 +1,6 @@
 package com.vcube.TradingCompany.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -25,4 +26,9 @@ public interface RiceStockRepository extends JpaRepository<RiceStock, Long> {
     Integer getTotalStock();
     
     Page<RiceStock> findAll(Pageable pageable);
+    
+    List<RiceStock> findByStockDate(LocalDate stockDate);
+    
+    @Query("SELECT r FROM RiceStock r WHERE YEAR(r.stockDate) = :year AND MONTH(r.stockDate) = :month")
+    List<RiceStock> findByMonth(int year, int month);
 }

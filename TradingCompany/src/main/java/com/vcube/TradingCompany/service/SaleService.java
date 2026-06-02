@@ -1,6 +1,8 @@
 package com.vcube.TradingCompany.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ public class SaleService {
     // 🛒 SELL RICE
     public String sellRice(Long stockId,
                            String customerName,
+                           String phone,
                            int bags,
                            String paymentStatus) {
 
@@ -59,6 +62,7 @@ public class SaleService {
 
         sale.setRiceStock(stock);
         sale.setCustomerName(customerName);
+        sale.setPhone(phone);
         sale.setBagsSold(bags);
         sale.setPricePerBag(stock.getPrice()); 
         sale.setTotalAmount(totalAmount);
@@ -126,4 +130,34 @@ public class SaleService {
         return saleRepository.findById(id).orElse(null);
 
     }
+    
+    
+    
+    public List<Sale> getSalesByDate(LocalDate date) {
+
+        LocalDateTime start = date.atStartOfDay();
+        LocalDateTime end = date.plusDays(1).atStartOfDay();
+
+        return saleRepository.findByDateBetween(start, end);
+    }
+    
+    public List<Sale> getSalesByMonth(int year, int month) {
+
+        LocalDate startDate = LocalDate.of(year, month, 1);
+
+        LocalDate endDate = startDate.plusMonths(1);
+
+        return saleRepository.findByDateBetween(
+                startDate.atStartOfDay(),
+                endDate.atStartOfDay());
+    }
+    
+    
+    public List<Sale> getUnpaidCustomers() {
+
+        return saleRepository.findByPaymentStatus("PENDING");
+
+    }
+    
+   
 }

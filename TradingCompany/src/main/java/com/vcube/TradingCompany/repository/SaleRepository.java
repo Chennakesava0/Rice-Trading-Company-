@@ -1,5 +1,6 @@
 package com.vcube.TradingCompany.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -19,5 +20,13 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     // Find sales by customer name
     List<Sale> findByCustomerName(String customerName);
     
-    Page<Sale> findAll(Pageable pageable);
+    
+    
+    List<Sale> findByDateBetween(
+            LocalDateTime start,
+            LocalDateTime end);
+    
+    
+
+    
 }

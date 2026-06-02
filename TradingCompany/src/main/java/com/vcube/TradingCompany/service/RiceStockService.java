@@ -160,5 +160,13 @@ public class RiceStockService {
 
 				.sum();
 	}
+	
+	public List<RiceStock> getStockByDate(LocalDate date) {
+	    return riceStockRepository.findByStockDate(date);
+	}
+
+	public List<RiceStock> getStockByMonth(int year, int month) {
+	    return riceStockRepository.findByMonth(year, month);
+	}
 
 }

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Unpaid Customers</title>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+
+<style>
+body {
+	background: #f5f7fa;
+}
+
+.header {
+	background: linear-gradient(135deg, #dc3545, #b02a37);
+	color: white;
+	padding: 25px;
+	border-radius: 15px;
+	margin-top: 20px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card {
+	border: none;
+	border-radius: 15px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+	background: white;
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table thead {
+	background: #dc3545;
+	color: white;
+}
+
+.table tbody tr:hover {
+	background: #fff5f5;
+}
+
+.pending-badge {
+	font-size: 14px;
+}
+</style>
+
+</head>
+<body>
+
+	<div class="container">
+
+		<!-- Header -->
+
+		<div class="header text-center">
+
+			<h1>💰 Unpaid Customers</h1>
+
+			<p class="mb-0">Rice Trading Management System</p>
+
+		</div>
+
+		<!-- Summary -->
+
+		<div class="row mt-4">
+
+			<div class="col-md-4">
+
+				<div class="card">
+
+					<div class="card-body text-center">
+
+						<h5>Total Unpaid Customers</h5>
+
+						<h2 class="text-danger" th:text="${#lists.size(unpaidList)}">
+						</h2>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="col-md-8 text-end">
+
+				<button type="button" class="btn btn-secondary mt-3"
+					onclick="history.back()">← Back</button>
+
+				<a href="/dashboard" class="btn btn-success mt-3"> 🏠 Dashboard
+				</a>
+
+			</div>
+
+		</div>
+
+		<!-- Table -->
+
+		<div class="table-container mt-4">
+
+			<h4 class="mb-3">Pending Customer Details</h4>
+
+			<div class="table-responsive">
+
+				<table class="table table-bordered table-hover align-middle">
+
+					<thead>
+
+						<tr>
+
+							<th>S.No</th>
+							<th>Customer Name</th>
+							<th>Phone Number</th>
+							<th>Rice Name</th>
+							<th>Bag Size</th>
+							<th>Price / Bag</th>
+							<th>Total Bags</th>
+							<th>Total Price</th>
+							<th>Status</th>
+
+						</tr>
+
+					</thead>
+
+					
+					<tbody>
+
+						<!-- DATA ROWS -->
+						<tr th:each="sale,stat : ${unpaidList}">
+
+							<td th:text="${stat.count}"></td>
+
+							<td th:text="${sale.customerName}"></td>
+
+							<td th:text="${sale.phone}"></td>
+
+							<td th:text="${sale.riceStock.rice.name}"></td>
+
+							<td th:text="${sale.riceStock.bagSize}"></td>
+
+							<td th:text="${sale.pricePerBag}"></td>
+
+							<td th:text="${sale.bagsSold}"></td>
+
+							<td th:text="${sale.totalAmount}"></td>
+
+							<td><span class="badge bg-warning"
+								th:text="${sale.paymentStatus}"></span></td>
+
+						</tr>
+
+						<!-- EMPTY ROW -->
+						<tr th:if="${#lists.isEmpty(unpaidList)}">
+							<td colspan="9" class="text-center text-success">No Pending
+								Customers Found</td>
+						</tr>
+
+					</tbody>
+
+				</table>
+
+			</div>
+
+		</div>
+
+		<!-- Information Card -->
+
+		<div class="card mt-4 mb-4">
+
+			<div class="card-body">
+
+				<h5>📌 Report Information</h5>
+
+				<ul class="mb-0">
+
+					<li>Displays customers with pending payments.</li>
+
+					<li>Shows customer contact details for follow-up.</li>
+
+					<li>Displays rice type, bag size and pricing details.</li>
+
+					<li>Helps track outstanding balances efficiently.</li>
+
+				</ul>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

@@ -1,7 +1,11 @@
 package com.vcube.TradingCompany.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AuthController {
@@ -12,9 +16,5 @@ public class AuthController {
         return "login";
     }
 
-    // 🔁 Redirect root to dashboard
-    @GetMapping("/")
-    public String home() {
-        return "redirect:/dashboard";
-    }
+   
 }

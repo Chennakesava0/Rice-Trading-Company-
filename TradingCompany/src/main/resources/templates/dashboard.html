@@ -2,329 +2,313 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Rice Trading Dashboard</title>
+<title>Rice Trading Dashboard</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+	rel="stylesheet">
 
-    <style>
-        body {
-            background: #f4f7fc;
-            font-family: Arial, sans-serif;
-        }
+<style>
+body {
+	background: #f4f7fc;
+	font-family: Arial, sans-serif;
+}
 
-        /* NAVBAR */
-        .navbar {
-            background: #2e7d32;
-        }
+/* NAVBAR */
+.navbar {
+	background: #2e7d32;
+}
 
-        .navbar-brand {
-            color: white !important;
-            font-weight: bold;
-            font-size: 24px;
-        }
+.navbar-brand {
+	color: white !important;
+	font-weight: bold;
+	font-size: 24px;
+}
 
-        /* SUMMARY CARDS */
-        .summary-card {
-            color: white;
-            padding: 22px;
-            border-radius: 18px;
-            transition: 0.3s;
-        }
+/* SUMMARY CARDS */
+.summary-card {
+	color: white;
+	padding: 22px;
+	border-radius: 18px;
+	transition: 0.3s;
+}
 
-        .summary-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-        }
+.summary-card:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
 
-        .stock {
-            background: linear-gradient(135deg, #0d6efd, #0b5ed7);
-        }
+.stock {
+	background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+}
 
-        .sold {
-            background: linear-gradient(135deg, #198754, #157347);
-        }
+.sold {
+	background: linear-gradient(135deg, #198754, #157347);
+}
 
-        .paid {
-            background: linear-gradient(135deg, #20c997, #1aa179);
-        }
+.paid {
+	background: linear-gradient(135deg, #20c997, #1aa179);
+}
 
-        .pending {
-            background: linear-gradient(135deg, #dc3545, #bb2d3b);
-        }
+.pending {
+	background: linear-gradient(135deg, #dc3545, #bb2d3b);
+}
 
-        .summary-icon {
-            font-size: 42px;
-            opacity: 0.9;
-        }
+.summary-icon {
+	font-size: 42px;
+	opacity: 0.9;
+}
 
-        /* ACTION CARDS */
-        .action-card {
-            border: none;
-            border-radius: 18px;
-            transition: 0.3s;
-        }
+/* ACTION CARDS */
+.action-card {
+	border: none;
+	border-radius: 18px;
+	transition: 0.3s;
+}
 
-        .action-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
+.action-card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
 
-        .icon {
-            font-size: 45px;
-            margin-bottom: 12px;
-        }
+.icon {
+	font-size: 45px;
+	margin-bottom: 12px;
+}
 
-        .rice {
-            color: #0d6efd;
-        }
+.rice {
+	color: #0d6efd;
+}
 
-        .stock-icon {
-            color: #198754;
-        }
+.stock-icon {
+	color: #198754;
+}
 
-        .sales {
-            color: #ffc107;
-        }
+.sales {
+	color: #ffc107;
+}
 
-        .payment {
-            color: #dc3545;
-        }
+.payment {
+	color: #dc3545;
+}
 
-        .section-title {
-            font-weight: bold;
-            color: #333;
-        }
+.section-title {
+	font-weight: bold;
+	color: #333;
+}
 
-        .btn {
-            border-radius: 10px;
-        }
-    </style>
+.btn {
+	border-radius: 10px;
+}
+</style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar px-4 py-3">
+	<!-- NAVBAR -->
+	<nav class="navbar px-4 py-3">
 
-    <span class="navbar-brand">
-        🌾 Rice Trading System
-    </span>
+		<span class="navbar-brand"> 🌾 Rice Trading System </span> <a
+			href="/logout" class="btn btn-light"> <i
+			class="bi bi-box-arrow-right"></i> Logout
+		</a>
 
-    <a href="/logout" class="btn btn-light">
-        <i class="bi bi-box-arrow-right"></i> Logout
-    </a>
+	</nav>
 
-</nav>
+	<div class="container mt-4">
 
-<div class="container mt-4">
+		<!-- SUMMARY -->
+		<div class="row g-4 mb-5">
 
-    <!-- SUMMARY -->
-    <div class="row g-4 mb-5">
+			<!-- TOTAL STOCK -->
+			<div class="col-md-3">
 
-        <!-- TOTAL STOCK -->
-        <div class="col-md-3">
+				<div class="summary-card stock shadow">
 
-            <div class="summary-card stock shadow">
+					<div class="d-flex justify-content-between align-items-center">
 
-                <div class="d-flex justify-content-between align-items-center">
+						<div>
+							<h6>Total Stock</h6>
 
-                    <div>
-                        <h6>Total Stock</h6>
+							<h2 th:text="${totalStock}">0</h2>
 
-                        <h2 th:text="${totalStock}">0</h2>
+							<small>Available Rice Bags</small>
+						</div>
 
-                        <small>Available Rice Bags</small>
-                    </div>
+						<i class="bi bi-box-seam summary-icon"></i>
 
-                    <i class="bi bi-box-seam summary-icon"></i>
+					</div>
 
-                </div>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
+			<!-- BAGS SOLD -->
+			<div class="col-md-3">
 
-        <!-- BAGS SOLD -->
-        <div class="col-md-3">
+				<div class="summary-card sold shadow">
 
-            <div class="summary-card sold shadow">
+					<div class="d-flex justify-content-between align-items-center">
 
-                <div class="d-flex justify-content-between align-items-center">
+						<div>
+							<h6>Bags Sold</h6>
 
-                    <div>
-                        <h6>Bags Sold</h6>
+							<h2 th:text="${totalBags}">0</h2>
 
-                        <h2 th:text="${totalBags}">0</h2>
+							<small>Total Sold Bags</small>
+						</div>
 
-                        <small>Total Sold Bags</small>
-                    </div>
+						<i class="bi bi-cart-check summary-icon"></i>
 
-                    <i class="bi bi-cart-check summary-icon"></i>
+					</div>
 
-                </div>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
+			<!-- PAID -->
+			<div class="col-md-3">
 
-        <!-- PAID -->
-        <div class="col-md-3">
+				<div class="summary-card paid shadow">
 
-            <div class="summary-card paid shadow">
+					<div class="d-flex justify-content-between align-items-center">
 
-                <div class="d-flex justify-content-between align-items-center">
+						<div>
+							<h6>Paid Amount</h6>
 
-                    <div>
-                        <h6>Paid Amount</h6>
+							<h2>
+								₹ <span th:text="${totalPaid}">0</span>
+							</h2>
 
-                        <h2>
-                            ₹ <span th:text="${totalPaid}">0</span>
-                        </h2>
+							<small>Received Payments</small>
+						</div>
 
-                        <small>Received Payments</small>
-                    </div>
+						<i class="bi bi-cash-stack summary-icon"></i>
 
-                    <i class="bi bi-cash-stack summary-icon"></i>
+					</div>
 
-                </div>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
+			<!-- PENDING -->
+			<div class="col-md-3">
 
-        <!-- PENDING -->
-        <div class="col-md-3">
+				<div class="summary-card pending shadow">
 
-            <div class="summary-card pending shadow">
+					<div class="d-flex justify-content-between align-items-center">
 
-                <div class="d-flex justify-content-between align-items-center">
+						<div>
+							<h6>Pending Amount</h6>
 
-                    <div>
-                        <h6>Pending Amount</h6>
+							<h2>
+								₹ <span th:text="${pendingAmount}">0</span>
+							</h2>
 
-                        <h2>
-                            ₹ <span th:text="${pendingAmount}">0</span>
-                        </h2>
+							<small>Remaining Payments</small>
+						</div>
 
-                        <small>Remaining Payments</small>
-                    </div>
+						<i class="bi bi-hourglass-split summary-icon"></i>
 
-                    <i class="bi bi-hourglass-split summary-icon"></i>
+					</div>
 
-                </div>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
+		</div>
 
-    </div>
+		<!-- QUICK ACTIONS -->
+		<h3 class="text-center section-title mb-4">Manage System</h3>
 
-    <!-- QUICK ACTIONS -->
-    <h3 class="text-center section-title mb-4">
-        Manage System
-    </h3>
+		<div class="row g-4">
 
-    <div class="row g-4">
+			<!-- RICE -->
+			<div class="col-md-3">
 
-        <!-- RICE -->
-        <div class="col-md-3">
+				<div class="card action-card text-center p-4 shadow-sm">
 
-            <div class="card action-card text-center p-4 shadow-sm">
+					<div class="icon rice">
+						<i class="bi bi-basket-fill"></i>
+					</div>
 
-                <div class="icon rice">
-                    <i class="bi bi-basket-fill"></i>
-                </div>
+					<h5>Rice</h5>
 
-                <h5>Rice</h5>
+					<p class="text-muted">Add & manage rice varieties</p>
 
-                <p class="text-muted">
-                    Add & manage rice varieties
-                </p>
+					<a href="/rice/list" class="btn btn-primary"> Manage </a>
 
-                <a href="/rice/list" class="btn btn-primary">
-                    Manage
-                </a>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
+			<!-- STOCK -->
+			<div class="col-md-3">
 
-        <!-- STOCK -->
-        <div class="col-md-3">
+				<div class="card action-card text-center p-4 shadow-sm">
 
-            <div class="card action-card text-center p-4 shadow-sm">
+					<div class="icon stock-icon">
+						<i class="bi bi-box-seam"></i>
+					</div>
 
-                <div class="icon stock-icon">
-                    <i class="bi bi-box-seam"></i>
-                </div>
+					<h5>Stock</h5>
 
-                <h5>Stock</h5>
+					<p class="text-muted">Manage stock & bag sizes</p>
 
-                <p class="text-muted">
-                    Manage stock & bag sizes
-                </p>
+					<a href="/stock/list" class="btn btn-success"> Manage </a>
 
-                <a href="/stock/list" class="btn btn-success">
-                    Manage
-                </a>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
+			<!-- SALES -->
+			<div class="col-md-3">
 
-        <!-- SALES -->
-        <div class="col-md-3">
+				<div class="card action-card text-center p-4 shadow-sm">
 
-            <div class="card action-card text-center p-4 shadow-sm">
+					<div class="icon sales">
+						<i class="bi bi-cart-fill"></i>
+					</div>
 
-                <div class="icon sales">
-                    <i class="bi bi-cart-fill"></i>
-                </div>
+					<h5>Sales</h5>
 
-                <h5>Sales</h5>
+					<p class="text-muted">Sell rice & track sales</p>
 
-                <p class="text-muted">
-                    Sell rice & track sales
-                </p>
+					<a href="/sales/sell" class="btn btn-warning"> Sell </a>
 
-                <a href="/sales/sell" class="btn btn-warning">
-                    Sell
-                </a>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
+			
+			<!-- REPORTS -->
+			<div class="col-md-3">
 
-        <!-- PAYMENTS -->
-        <div class="col-md-3">
+				<div class="card action-card text-center p-4 shadow-sm">
 
-            <div class="card action-card text-center p-4 shadow-sm">
+					<div class="icon payment">
+						<i class="bi bi-bar-chart-fill"></i>
+					</div>
 
-                <div class="icon payment">
-                    <i class="bi bi-cash-coin"></i>
-                </div>
+					<h5>Reports</h5>
 
-                <h5>Payments</h5>
+					<p class="text-muted">Sales, Stock & Unpaid Customer Reports</p>
 
-                <p class="text-muted">
-                    View & update payments
-                </p>
+					<a href="/reports" class="btn btn-danger"> Open Reports </a>
 
-                <a href="/sales/list" class="btn btn-danger">
-                    View
-                </a>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
+		</div>
 
-    </div>
-
-</div>
+	</div>
 
 </body>
 </html>

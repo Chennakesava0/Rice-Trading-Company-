@@ -17,9 +17,14 @@
 			<h2 class="text-primary">📋 Sales List</h2>
 
 			<div>
-				<a href="/dashboard" class="btn btn-secondary btn-sm"> Dashboard
-				</a> <a href="/sales/sell" class="btn btn-success btn-sm"> + New
-					Sale </a>
+				<a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+					← Back </a>
+					
+					 <a href="/dashboard" class="btn btn-secondary btn-sm">
+					Dashboard </a> 
+					
+					<a href="/sales/sell" class="btn btn-success btn-sm">
+					+ New Sale </a>
 			</div>
 		</div>
 
@@ -33,6 +38,7 @@
 						<tr>
 							<th>ID</th>
 							<th>Customer Name</th>
+							<th>Phone</th>
 							<th>Rice</th>
 							<th>Bag Size</th>
 							<th>Price/Bag (₹)</th>
@@ -51,6 +57,8 @@
 							<td th:text="${sale.id}"></td>
 
 							<td th:text="${sale.customerName}"></td>
+
+							<td th:text="${sale.phone}"></td>
 
 							<td th:text="${sale.riceStock.rice.name}"></td>
 

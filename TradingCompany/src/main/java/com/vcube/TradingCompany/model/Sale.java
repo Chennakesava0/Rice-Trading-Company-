@@ -77,6 +77,8 @@ public class Sale {
 	private RiceStock riceStock;
 
 	private String customerName;
+	
+	private String phone;
 
 	private int bagsSold;
 	
