@@ -18,66 +18,54 @@ public class RiceStockService {
 	@Autowired
 	private RiceStockRepository riceStockRepository;
 
-	// ➕ Add or Update Stock
+	// ➕ Add NEW Stock
 	public String addStock(RiceStock newStock) {
-		
-		 // ✅ Current Date
+
+	    // 1. Set current date
 	    newStock.setStockDate(LocalDate.now());
 
-		// ✅ Stock validation
-		if (newStock.getStock() <= 0) {
+	    // 2. Stock validation
+	    if (newStock.getStock() <= 0) {
+	        return "Stock must be greater than 0";
+	    }
 
-			return "Stock must be greater than 0";
-		}
+	    // 3. Stock count validation
+	    if (newStock.getStock() > 500) {
+	        return "Stock should be below 500 bags";
+	    }
 
-		// ✅ Stock count validation
-		if (newStock.getStock() > 500) {
+	    // 4. Price validation
+	    if (newStock.getPrice() <= 0) {
+	        return "Price must be greater than 0";
+	    }
 
-			return "Stock should be below 500 bags";
-		}
+	    // 5. Price validation
+	    if (newStock.getPrice() > 99999) {
+	        return "Price should contain only 5 digits";
+	    }
 
-		// ✅ Price validation
-		if (newStock.getPrice() <= 0) {
+	    // 6. Bag size validation
+	    if (newStock.getBagSize() == null ||
+	            newStock.getBagSize().trim().isEmpty()) {
 
-			return "Price must be greater than 0";
-		}
+	        return "Bag size is required";
+	    }
 
-		// ✅ Price 5 digit validation
-		if (newStock.getPrice() > 99999) {
+	    // 7. Remove extra spaces
+	    newStock.setBagSize(newStock.getBagSize().trim());
 
-			return "Price should contain only 5 digits";
-		}
+	    // 8. Calculate total price
+	    newStock.setTotalPrice(
+	            newStock.getPrice() * newStock.getStock()
+	    );
 
-		// ✅ Bag size validation
-		if (newStock.getBagSize() == null || newStock.getBagSize().trim().isEmpty()) {
+	    // 9. Always create a NEW stock row
+	    riceStockRepository.save(newStock);
 
-			return "Bag size is required";
-		}
-
-		// ✅ Remove spaces
-		newStock.setBagSize(newStock.getBagSize().trim());
-
-		// ✅ Check existing stock
-		RiceStock existing = riceStockRepository.findByRiceAndBagSize(newStock.getRice(), newStock.getBagSize());
-
-		// ✅ Update existing stock
-		if (existing != null) {
-
-			existing.setStock(existing.getStock() + newStock.getStock());
-
-			// Update latest price
-			existing.setPrice(newStock.getPrice());
-
-			riceStockRepository.save(existing);
-
-			return "Stock updated successfully";
-		}
-
-		// ✅ Save new stock
-		riceStockRepository.save(newStock);
-
-		return "Stock added successfully";
+	    return "Stock added successfully";
 	}
+
+		
 
 	// 📋 Get all stock
 	public List<RiceStock> getAllStock() {
